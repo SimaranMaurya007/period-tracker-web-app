@@ -11,11 +11,11 @@ A smart, privacy-focused mobile and web app built with **Flutter** and powered b
 ---
 
 ## 📸 App Screenshots
-<img src="screenshots/signUp Page.png" width="200"/><img src="screenshots/login_page.png" width="200"/>
-<img src="screenshots/Home_Page.png" width="200"/><img src="screenshots/select_date&mood.png" width="200"/>
-<img src="screenshots/History_Page.png" width="200"/><img src="screenshots/FAQ.png" width="200"/>
-<img src="screenshots/AI chat.png" width="200"/><img src="screenshots/bmi_calculator.png" width="200"/>
-<img src="screenshots/Blogs.png" width="200"/><img src="screenshots/account.png" width="200"/>
+<img src="screenshots/signUp Page.png" width="700"/><img src="screenshots/login_page.png" width="700"/>
+<img src="screenshots/Home_Page.png" width="700"/><img src="screenshots/select_date&mood.png" width="700"/>
+<img src="screenshots/History_Page.png" width="700"/><img src="screenshots/FAQ.png" width="700"/>
+<img src="screenshots/AI chat.png" width="700"/><img src="screenshots/bmi_calculator.png" width="700"/>
+<img src="screenshots/Blogs.png" width="700"/><img src="screenshots/account.png" width="700"/>
 
 ---
 
