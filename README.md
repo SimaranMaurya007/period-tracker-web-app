@@ -7,6 +7,8 @@ A smart, privacy-focused mobile and web app built with **Flutter** and powered b
 ## 🔗 Live Demo
 
 👉 [Click here to try the live web version](https://my-firebase-project-62f59.web.app/)  
+Try login with
+#username-test, email-test@gmail.com, password-123456
 
 ---
 
