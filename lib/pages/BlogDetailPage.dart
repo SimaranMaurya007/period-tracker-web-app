@@ -14,7 +14,13 @@ class BlogDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Text('Blog Details'),
+        backgroundColor: Colors.pink[100],
+        elevation: 0,
       ),
       body: Stack(
         children: [
@@ -51,40 +57,46 @@ class BlogDetailPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20.0),
-                // White Box with Rounded Corners
-                Container(
-                  padding: EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12, // Mild shadow color
-                        offset: Offset(0, 2),
-                        blurRadius: 6.0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Blog Title
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                      // Blog Content
-                      Text(
-                        content,
-                        style: TextStyle(fontSize: 16.0),
-                      ),
-                    ],
-                  ),
-                ),
+                                 // White Box with Rounded Corners
+                 Expanded(
+                   child: Container(
+                     padding: EdgeInsets.all(16.0),
+                     decoration: BoxDecoration(
+                       color: Colors.white,
+                       borderRadius: BorderRadius.circular(10.0),
+                       boxShadow: [
+                         BoxShadow(
+                           color: Colors.black12, // Mild shadow color
+                           offset: Offset(0, 2),
+                           blurRadius: 6.0,
+                         ),
+                       ],
+                     ),
+                     child: SingleChildScrollView(
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.center,
+                         children: [
+                           // Blog Title
+                           Text(
+                             title,
+                             style: TextStyle(
+                               fontSize: 20.0,
+                               fontWeight: FontWeight.bold,
+                             ),
+                             textAlign: TextAlign.center,
+                           ),
+                           SizedBox(height: 20.0),
+                           // Blog Content
+                           Text(
+                             content,
+                             style: TextStyle(fontSize: 16.0),
+                             textAlign: TextAlign.center,
+                           ),
+                         ],
+                       ),
+                     ),
+                   ),
+                 ),
               ],
             ),
           ),
