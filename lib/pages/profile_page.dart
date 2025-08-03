@@ -30,39 +30,243 @@ class _BMIPageState extends State<BMIPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Text('BMI Calculator'),
+        backgroundColor: Colors.pink[100],
+        elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _heightController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Height (cm)'),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _weightController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Weight (kg)'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _calculateBMI();
-              },
-              child: Text('Calculate BMI'),
-            ),
-            SizedBox(height: 20),
-            _bmiResult != null
-                ? Text(
-                    'BMI: ${_bmiResult?.toStringAsFixed(1)}',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  )
-                : Container(),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.pink[50]!,
+              Colors.white,
+            ],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              // Header Card
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(20),
+                                 decoration: BoxDecoration(
+                   color: Colors.pink[200],
+                   borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.pink.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.monitor_weight,
+                      size: 50,
+                      color: Colors.pink[700],
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Body Mass Index Calculator',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.pink[800],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      'Calculate your BMI to understand your health status',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.pink[600],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+              
+              // Input Fields Card
+              Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 10,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    // Height Input
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[50],
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: Colors.pink[200]!),
+                      ),
+                      child: TextField(
+                        controller: _heightController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Height (cm)',
+                          labelStyle: TextStyle(color: Colors.pink[600]),
+                          border: InputBorder.none,
+                          icon: Icon(Icons.height, color: Colors.pink[400]),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    
+                    // Weight Input
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[50],
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: Colors.pink[200]!),
+                      ),
+                      child: TextField(
+                        controller: _weightController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Weight (kg)',
+                          labelStyle: TextStyle(color: Colors.pink[600]),
+                          border: InputBorder.none,
+                          icon: Icon(Icons.fitness_center, color: Colors.pink[400]),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 25),
+                    
+                    // Calculate Button
+                    Container(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _calculateBMI,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pink[400],
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          elevation: 3,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.calculate, size: 20),
+                            SizedBox(width: 10),
+                            Text(
+                              'Calculate BMI',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+              
+              // Result Card
+              if (_bmiResult != null) ...[
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(25),
+                  decoration: BoxDecoration(
+                    color: _getBMIColor(_bmiResult!),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: _getBMIColor(_bmiResult!).withOpacity(0.3),
+                        spreadRadius: 2,
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(
+                        _getBMIIcon(_bmiResult!),
+                        size: 60,
+                        color: Colors.white,
+                      ),
+                      SizedBox(height: 15),
+                      Text(
+                        'Your BMI',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '${_bmiResult!.toStringAsFixed(1)}',
+                        style: TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Text(
+                          _getBMICategory(_bmiResult!),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        _getBMIAdvice(_bmiResult!),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );
@@ -78,6 +282,39 @@ class _BMIPageState extends State<BMIPage> {
       setState(() {
         _bmiResult = bmi;
       });
+    }
+  }
+
+  Color _getBMIColor(double bmi) {
+    if (bmi < 18.5) return Colors.blue[400]!; // Underweight
+    if (bmi < 25) return Colors.green[400]!; // Normal
+    if (bmi < 30) return Colors.orange[400]!; // Overweight
+    return Colors.red[400]!; // Obese
+  }
+
+  IconData _getBMIIcon(double bmi) {
+    if (bmi < 18.5) return Icons.trending_down; // Underweight
+    if (bmi < 25) return Icons.check_circle; // Normal
+    if (bmi < 30) return Icons.warning; // Overweight
+    return Icons.error; // Obese
+  }
+
+  String _getBMICategory(double bmi) {
+    if (bmi < 18.5) return 'Underweight';
+    if (bmi < 25) return 'Normal Weight';
+    if (bmi < 30) return 'Overweight';
+    return 'Obese';
+  }
+
+  String _getBMIAdvice(double bmi) {
+    if (bmi < 18.5) {
+      return 'You are underweight. Consider increasing your caloric intake with healthy foods and consult a healthcare provider.';
+    } else if (bmi < 25) {
+      return 'Great! You are in the healthy weight range. Maintain a balanced diet and regular exercise routine.';
+    } else if (bmi < 30) {
+      return 'You are overweight. Focus on a balanced diet and regular physical activity to improve your health.';
+    } else {
+      return 'You are in the obese category. Please consult a healthcare provider for personalized advice and support.';
     }
   }
 }
@@ -113,93 +350,202 @@ class _ProfilePageState extends State<ProfilePage> {
     String shortenedEmail = widget.email.substring(0, widget.email.length - 10);
 
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text('Profile'),
+        backgroundColor: Colors.pink[100],
+        elevation: 0,
+      ),
       body: Stack(
         children: [
-          // Background Image
-          // ColorFiltered(
-          //   colorFilter: ColorFilter.mode(
-          //     Colors.black.withOpacity(0.5), // Change the opacity value here
-          //     BlendMode.darken,
-          //   ),
-          //   child: Image.asset(
-          //     'assets/profile_background.jpg',
-          //     fit: BoxFit.cover, // Cover the entire screen
-          //   ),
-          // ),
-          // Foreground content
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Modern Profile Header
               Container(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(225, 115, 168,
-                      1), // Set background color to purple with transparency
-                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.pink[100]!,
+                      Colors.pink[200]!,
+                      Colors.pink[300]!,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
+                      color: Colors.pink.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
                     ),
                   ],
                 ),
                 child: Column(
                   children: [
+                    // Profile Image with Border
                     GestureDetector(
                       onTap: _getImage,
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: _image != null
-                            ? FileImage(_image!)
-                            : AssetImage('assets/about_logo.jpg')
-                                as ImageProvider,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 4,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 8,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.white,
+                          backgroundImage: _image != null
+                              ? FileImage(_image!)
+                              : AssetImage('assets/about_logo.jpg')
+                                  as ImageProvider,
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
-                    Text(
-                      shortenedEmail,
-                      style: TextStyle(fontSize: 16),
+                    // User Name/Email
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(25),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        shortenedEmail,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.pink[700],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 20),
               Expanded(
-                child: ListView(
-                  children: [
-                    _buildOptionTile('BMI Calculator', () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BMIPage()),
-                      );
-                    }),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                      child: ElevatedButton(
-                        onPressed: _logout,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(
-                              255, 200, 118, 209), // Background color
-                          // shadowColor: Colors.white, // Text color
-                          padding: EdgeInsets.symmetric(vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          elevation: 5, // Shadow elevation
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  child: ListView(
+                    children: [
+                      // BMI Calculator Card
+                      Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
                         ),
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(
+                        child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          leading: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.pink[100],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              Icons.calculate,
+                              color: Colors.pink[700],
+                              size: 24,
+                            ),
+                          ),
+                          title: Text(
+                            'BMI Calculator',
+                            style: TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Calculate your Body Mass Index',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.pink[300],
+                            size: 16,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => BMIPage()),
+                            );
+                          },
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 30),
+                      // Logout Button
+                      Container(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _logout,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.pink[400],
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: 18),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            elevation: 3,
+                            shadowColor: Colors.pink.withOpacity(0.3),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.logout, size: 20),
+                              SizedBox(width: 10),
+                              Text(
+                                'Logout',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
