@@ -22,7 +22,7 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   late final ValueNotifier<List<Event>> _selectedEvents;
-  CalendarFormat _calendarFormat = CalendarFormat.week;
+  CalendarFormat _calendarFormat = CalendarFormat.month;
   // RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -297,224 +297,246 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     DateTime? predicatedDate = getPredicatedDate(markedDates);
     String predicatedDateString = predicatedDate != null
-        ? DateFormat('yMMMd').format(predicatedDate) // Format the date
+        ? DateFormat('yMMMd').format(predicatedDate)
         : 'No predicted date available';
+    
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Calendar Page'),
-      ),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              expandedHeight: 500.0,
-              floating: false,
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                // title: Text('Calendar Page'),
-                background: TableCalendar<Event>(
-                  firstDay: kFirstDay,
-                  lastDay: kLastDay,
-                  focusedDay: _focusedDay,
-                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                  rangeStartDay: _rangeStart,
-                  rangeEndDay: _rangeEnd,
-                  calendarFormat: _calendarFormat,
-                  // rangeSelectionMode: _rangeSelectionMode,
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  calendarStyle: CalendarStyle(
-                    outsideDaysVisible: false,
-                  ),
-                  onFormatChanged: (format) {
-                    if (_calendarFormat != format) {
-                      setState(() {
-                        _calendarFormat = format;
-                      });
-                    }
-                  },
-                  onPageChanged: (focusedDay) {
-                    setState(() {
-                      _focusedDay = focusedDay;
-                    });
-                  },
-                  eventLoader: (day) {
-                    return _kEvents[day] ?? [];
-                  },
-                  onDaySelected: (selectedDay, focusedDay) {
-                    setState(() {
-                      _selectedDay = selectedDay;
-                      _focusedDay = focusedDay;
-                      _selectedEvents.value = _kEvents[selectedDay] ?? [];
-                    });
-                  },
-                  calendarBuilders: CalendarBuilders(
-                    // Customize the appearance of each date cell
-                    defaultBuilder: (context, date, _) {
-                      bool isMarked = markedDates
-                          .any((markedDate) => isSameDay(markedDate, date));
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: isMarked
-                              ? const Color.fromARGB(255, 243, 37, 51)
-                                  .withOpacity(0.5)
-                              : Colors
-                                  .transparent, // Change background color for marked dates
-                          shape: BoxShape.circle, // Set shape to circle
-                          border: Border.all(color: Colors.grey, width: 0.5),
-                        ),
-                        alignment: Alignment.center,
-                        width: 40.0, // Set width to make it more circular
-                        height: 40.0, // Set height to make it more circular
-                        child: Text(
-                          date.day.toString(),
-                          style: TextStyle(
-                            color: isMarked
-                                ? Colors.white
-                                : Colors
-                                    .black, // Change text color for marked dates
-                          ),
-                        ),
-                      );
-                    },
-
-                    markerBuilder: (context, date, events) {
-                      // You can still use marker builder for additional markers if needed
-                      return SizedBox(); // Return an empty SizedBox for now
-                    },
-                  ),
-                ),
-              ),
-            ),
-            // ),
-          ];
-        },
-        body: Column(
+             appBar: AppBar(
+         leading: IconButton(
+           icon: Icon(Icons.arrow_back),
+           onPressed: () => Navigator.of(context).pop(),
+         ),
+         title: Text('Select Period Date'),
+         backgroundColor: Colors.pink[100],
+         elevation: 0,
+         actions: [
+           IconButton(
+             icon: Icon(Icons.chevron_left),
+             onPressed: () {
+               setState(() {
+                 _focusedDay = DateTime(_focusedDay.year, _focusedDay.month - 1);
+               });
+             },
+           ),
+           IconButton(
+             icon: Icon(Icons.chevron_right),
+             onPressed: () {
+               setState(() {
+                 _focusedDay = DateTime(_focusedDay.year, _focusedDay.month + 1);
+               });
+             },
+           ),
+         ],
+       ),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            const SizedBox(height: 4.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Periods',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25.0,
+                         // Calendar Section
+             Container(
+               margin: EdgeInsets.all(16.0),
+               child: TableCalendar<Event>(
+                firstDay: kFirstDay,
+                lastDay: kLastDay,
+                focusedDay: _focusedDay,
+                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                rangeStartDay: _rangeStart,
+                rangeEndDay: _rangeEnd,
+                calendarFormat: _calendarFormat,
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                headerVisible: false,
+                calendarStyle: CalendarStyle(
+                  outsideDaysVisible: false,
+                  weekendTextStyle: TextStyle(color: Colors.red),
+                  holidayTextStyle: TextStyle(color: Colors.red),
+                  defaultTextStyle: TextStyle(color: Colors.black87),
+                  selectedTextStyle: TextStyle(color: Colors.white),
+                  todayTextStyle: TextStyle(color: Colors.white),
+                  selectedDecoration: BoxDecoration(
+                    color: Colors.pink[300],
+                    shape: BoxShape.circle,
+                  ),
+                  todayDecoration: BoxDecoration(
+                    color: Colors.pink[200],
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                onFormatChanged: (format) {
+                  if (_calendarFormat != format) {
+                    setState(() {
+                      _calendarFormat = format;
+                    });
+                  }
+                },
+                onPageChanged: (focusedDay) {
+                  setState(() {
+                    _focusedDay = focusedDay;
+                  });
+                },
+                eventLoader: (day) {
+                  return _kEvents[day] ?? [];
+                },
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                    _selectedEvents.value = _kEvents[selectedDay] ?? [];
+                  });
+                },
+                calendarBuilders: CalendarBuilders(
+                  defaultBuilder: (context, date, _) {
+                    bool isMarked = markedDates
+                        .any((markedDate) => isSameDay(markedDate, date));
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: isMarked
+                            ? const Color.fromARGB(255, 243, 37, 51)
+                                .withOpacity(0.5)
+                            : Colors.transparent,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.grey, width: 0.5),
+                      ),
+                      alignment: Alignment.center,
+                      width: 40.0,
+                      height: 40.0,
+                      child: Text(
+                        date.day.toString(),
+                        style: TextStyle(
+                          color: isMarked ? Colors.white : Colors.black,
+                        ),
+                      ),
+                    );
+                  },
+                  markerBuilder: (context, date, events) {
+                    return SizedBox();
+                  },
                 ),
               ),
             ),
-            const SizedBox(height: 2.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            
+                         // Periods Section
+             Container(
+               margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+               padding: EdgeInsets.all(16.0),
+               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildSelectableBlock('Light', 'assets/light1.png'),
-                  _buildSelectableBlock('Medium', 'assets/medium1.png'),
-                  _buildSelectableBlock('Heavy', 'assets/heavy1.png'),
+                  Text(
+                    'Period Type',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                      color: Colors.pink[700],
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildSelectableBlock('Light', 'assets/light1.png'),
+                      _buildSelectableBlock('Medium', 'assets/medium1.png'),
+                      _buildSelectableBlock('Heavy', 'assets/heavy1.png'),
+                    ],
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 10.0),
-            Expanded(
-              child: ValueListenableBuilder<List<Event>>(
-                valueListenable: _selectedEvents,
-                builder: (context, value, _) {
-                  return ListView.builder(
-                    itemCount: value.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 20.0,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: ListTile(
-                          onTap: () => print('${value[index]}'),
-                          title: Text('${value[index]}'),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 4.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Mood',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25.0,
-                ),
-              ),
-            ),
-            const SizedBox(height: 2.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            
+                         // Mood Section
+             Container(
+               margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+               padding: EdgeInsets.all(16.0),
+               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Replicate buildSelectableBlock for mood options
-                  _buildMoodSelectable('Happy', 'assets/happy.png'),
-                  _buildMoodSelectable('Sad', 'assets/sad.png'),
-                  _buildMoodSelectable('Excited', 'assets/excited.png'),
-                  _buildMoodSelectable('Angry', 'assets/angry.png'),
-                  _buildMoodSelectable('Calm', 'assets/calm.png'),
-                  _buildMoodSelectable('Confused', 'assets/confused.png'),
+                  Text(
+                    'Mood',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                      color: Colors.pink[700],
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _buildMoodSelectable('Happy', 'assets/happy.png'),
+                        SizedBox(width: 12.0),
+                        _buildMoodSelectable('Sad', 'assets/sad.png'),
+                        SizedBox(width: 12.0),
+                        _buildMoodSelectable('Excited', 'assets/excited.png'),
+                        SizedBox(width: 12.0),
+                        _buildMoodSelectable('Angry', 'assets/angry.png'),
+                        SizedBox(width: 12.0),
+                        _buildMoodSelectable('Calm', 'assets/calm.png'),
+                        SizedBox(width: 12.0),
+                        _buildMoodSelectable('Confused', 'assets/confused.png'),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 10.0),
-            Expanded(
-              child: ValueListenableBuilder<List<Event>>(
-                valueListenable: _selectedEvents,
-                builder: (context, value, _) {
-                  return ListView.builder(
-                    itemCount: value.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 20.0,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: ListTile(
-                          onTap: () => print('${value[index]}'),
-                          title: Text('${value[index]}'),
-                        ),
-                      );
-                    },
-                  );
-                },
+            
+                         // Predicted Date Section
+             Container(
+               margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+               padding: EdgeInsets.all(16.0),
+               child: Row(
+                children: [
+                  Icon(Icons.calendar_today, color: Colors.pink[700]),
+                  SizedBox(width: 12.0),
+                  Expanded(
+                    child: Text(
+                      'Predicted Period Date: $predicatedDateString',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                        color: Colors.pink[700],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 4.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Predicted Period Date: $predicatedDateString',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25.0,
-                ),
-              ),
-            ),
+            
+            SizedBox(height: 20.0),
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, -3),
+            ),
+          ],
+        ),
         child: ElevatedButton(
           onPressed: () {
-            _savePeriod(widget.email); // Use the widget's email
+            _savePeriod(widget.email);
           },
-          child: Text('Save Period'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.pink[400],
+            foregroundColor: Colors.white,
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+          ),
+          child: Text(
+            'Save Period',
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
