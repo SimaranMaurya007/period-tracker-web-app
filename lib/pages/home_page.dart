@@ -195,41 +195,6 @@ class _HomePageState extends State<HomePage> {
             expandedHeight: 200.0,
             floating: false,
             pinned: true,
-            // flexibleSpace: FlexibleSpaceBar(
-            //   title: Text('Period Tracker'),
-            //   background: Container(
-            //     width: double.infinity,
-            //     height: 100.0,
-            //     decoration: BoxDecoration(
-            //       gradient: LinearGradient(
-            //         colors: [Colors.pink, Colors.purple],
-            //         begin: Alignment.topLeft,
-            //         end: Alignment.bottomRight,
-            //       ),
-            //     ),
-            //     child: Stack(
-            //       children: [
-            //         Align(
-            //           alignment: Alignment.topRight,
-            //           child: IconButton(
-            //             icon: Icon(Icons.person),
-            //             onPressed: () => _navigateToProfilePage(context),
-            //           ),
-            //         ),
-            //         Center(
-            //           child: ClipOval(
-            //             child: Image.asset(
-            //               'Aura.png', // Replace with your photo asset path
-            //               width: 100.0,
-            //               height: 100.0,
-            //               fit: BoxFit.cover,
-            //             ),
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
             flexibleSpace: FlexibleSpaceBar(
               // title: Text('Welcome'),
               title: Text(
@@ -254,20 +219,6 @@ class _HomePageState extends State<HomePage> {
                       height:
                           400.0, // Set the height to match the FlexibleSpaceBar
                     ),
-                    // Overlay for better readability of the title and other elements (optional)
-                    // Container(
-                    //   color: Colors.black
-                    //       .withOpacity(0.3), // Semi-transparent overlay
-                    // ),
-                    // Align(
-                    //   alignment: Alignment.topLeft,
-                    //   child: IconButton(
-                    //     icon: Icon(Icons.person,
-                    //         color: const Color.fromARGB(
-                    //             255, 0, 0, 0)), // Adjust icon color if needed
-                    //     onPressed: () => _navigateToProfilePage(context),
-                    //   ),
-                    // ),
                     Align(
                       alignment: Alignment.topLeft,
                       child: Container(
@@ -457,16 +408,6 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => ChatPage()),
                 );
                 break;
-              // case 3:
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => ProfilePage(
-              //             userId: widget.userId,
-              //             email: widget.email,
-              //           )),
-              // );
-              // break;
             }
           },
         ),
