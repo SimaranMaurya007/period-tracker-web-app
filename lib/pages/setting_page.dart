@@ -2,16 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'BlogDetailPage.dart';
 
-void main() {
-  runApp(SettingsPage());
-}
-
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlogPage(),
-    );
+    return BlogPage();
   }
 }
 
@@ -66,8 +60,13 @@ class BlogPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Text('Blogs'),
-        backgroundColor: Colors.purple[200],
+        backgroundColor: Colors.pink[100],
+        elevation: 0,
       ),
       body: ListView.builder(
         itemCount: blogs.length,
@@ -115,17 +114,19 @@ class BlogPage extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Blog Title
-                          Text(
-                            blogs[index]['title'] ?? 'Default Title',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                                           child: Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
+                       mainAxisAlignment: MainAxisAlignment.center,
+                       children: [
+                         // Blog Title
+                         Text(
+                           blogs[index]['title'] ?? 'Default Title',
+                           style: TextStyle(
+                             fontSize: 18.0,
+                             fontWeight: FontWeight.bold,
+                           ),
+                           textAlign: TextAlign.start,
+                         ),
                           SizedBox(height: 8.0),
                           // Blog Content (Preview)
                         ],
